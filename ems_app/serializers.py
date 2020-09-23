@@ -47,38 +47,38 @@ class EmployeeModelSerializer(ModelSerializer):
         }
 
 
-jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-
-
-class TokenSerializer(ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["username", "password", ]
-        extra_kwargs = {
-            "username": {
-                "read_only": True,
-            },
-            "password": {
-                "read_only": True,
-            }
-        }
-
-    # 完成token的生成
-    def validate(self, attrs):
-        print(attrs)
-        print(self.context.get('name'))
-        account = self.context.get('name')
-        pwd = attrs.get("password")
-        user_obj = User.objects.filter(username=account).first()
-
-        if user_obj and user_obj.check_password(pwd):
-            # 签发token
-            payload = jwt_payload_handler(user_obj)  # 生成载荷
-            token = jwt_encode_handler(payload)  # 生成token
-            self.token = token
-            self.obj=user_obj
-            return attrs
-
-        raise exceptions.ValidationError('用户名密码错误。不签发Token')
+# jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+# jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+#
+#
+# class TokenSerializer(ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ["username", "password", ]
+#         extra_kwargs = {
+#             "username": {
+#                 "read_only": True,
+#             },
+#             "password": {
+#                 "read_only": True,
+#             }
+#         }
+#
+#     # 完成token的生成
+#     def validate(self, attrs):
+#         print(attrs)
+#         print(self.context.get('name'))
+#         account = self.context.get('name')
+#         pwd = attrs.get("password")
+#         user_obj = User.objects.filter(username=account).first()
+#
+#         if user_obj and user_obj.check_password(pwd):
+#             # 签发token
+#             payload = jwt_payload_handler(user_obj)  # 生成载荷
+#             token = jwt_encode_handler(payload)  # 生成token
+#             self.token = token
+#             self.obj=user_obj
+#             return attrs
+#
+#         raise exceptions.ValidationError('用户名密码错误。不签发Token')
 

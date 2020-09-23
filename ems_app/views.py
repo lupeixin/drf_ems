@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin
+from rest_framework.mixins import ListModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin, \
+    RetrieveModelMixin
 
 from ems_app.models import User, Employee
 from ems_app.serializers import UserModelSerializer, EmployeeModelSerializer
@@ -41,15 +42,20 @@ class UserAPIView(APIView):
         return APIResponse(400, False)
 
 
-class EmployeeGenericAPIView(ListModelMixin, CreateModelMixin, GenericAPIView, DestroyModelMixin, UpdateModelMixin):
+class EmployeeGenericAPIView(ListModelMixin, RetrieveModelMixin, CreateModelMixin, GenericAPIView, DestroyModelMixin, UpdateModelMixin):
     queryset = Employee.objects.all()
     serializer_class = EmployeeModelSerializer
 
     lookup_field = "id"
 
     def get(self, request, *args, **kwargs):
+        print(kwargs)
+        emp_id = kwargs.get("id")
+        print(emp_id)
+        if emp_id:
+            response = self.retrieve(request, *args, **kwargs)
+            return APIResponse(200, True, results=response.data)
         response = self.list(request, *args, **kwargs)
-
         return APIResponse(200, True, results=response.data)
 
     def post(self, request, *args, **kwargs):
@@ -69,14 +75,14 @@ class EmployeeGenericAPIView(ListModelMixin, CreateModelMixin, GenericAPIView, D
         return APIResponse(200, True, results=updata_emp.data)
 
 
-class TokenAPIView(APIView):
-    authentication_classes = []
-    permission_classes = []
-
-    def post(self, request, *args, **kwargs):
-        print(request.data)
-        serializer = TokenSerializer(data=request.data, context={"name": request.data['username']})
-        serializer.is_valid(raise_exception=True)
-        data = TokenSerializer(serializer.obj).data
-
-        return APIResponse(data_message="OK", token=serializer.token, results=data)
+# class TokenAPIView(APIView):
+#     authentication_classes = []
+#     permission_classes = []
+#
+#     def post(self, request, *args, **kwargs):
+#         print(request.data)
+#         serializer = TokenSerializer(data=request.data, context={"name": request.data['username']})
+#         serializer.is_valid(raise_exception=True)
+#         data = TokenSerializer(serializer.obj).data
+#
+#         return APIResponse(data_message="OK", token=serializer.token, results=data)

@@ -126,21 +126,21 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     # 默认的全局异常的处理方法
     'EXCEPTION_HANDLER': 'utils.exceptions.exception_handler',
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    #     'rest_framework.authentication.SessionAuthentication',
+    #     'rest_framework.authentication.BasicAuthentication',
+    # ),
 }
 
 # jwt相关的配置
 JWT_AUTH = {
     # 过期时间
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),
-    'JWT_AUTH_HEADER_PREFIX': 'auth',
+    # 'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),
+    # 'JWT_AUTH_HEADER_PREFIX': 'auth',
 }
 
 # 允许跨域请求访问
